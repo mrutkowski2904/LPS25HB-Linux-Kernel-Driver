@@ -1,0 +1,31 @@
+/dts-v1/;
+/plugin/;
+/ {
+	/* Raspberry Pi 3 */
+	compatible = "brcm,bcm2837";
+
+    /* need to disable spi dev 0, so driver can use it */
+	fragment@0 {
+		target = <&spidev0>;
+		__overlay__ {
+			status = "disabled";
+		};
+	};
+	
+	fragment@1 {
+		target = <&spi0>;
+		__overlay__ {
+			status = "okay";
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			mr_lps25hb: mr_lps25hb@0 {
+				compatible = "mr,lps25hb";
+				reg = <0x0>;
+				spi-max-frequency = <4000>;
+				spi-bits-per-word = <8>;
+				status = "okay";
+			};
+		};
+	};
+};
